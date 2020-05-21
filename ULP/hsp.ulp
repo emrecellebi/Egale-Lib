@@ -1,0 +1,247 @@
+#usage "en: <b>Basic Calculate</b>: 1st TextBox Value, 2st TextBox Value <br />"
+"<br />"
+"<b>Resistance Calculate</b>: 1st TextBox Value, 2st TextBox Multiplication <br />"
+"<br />"
+"<b>Voltage Divider Calculate</b>: 1st TextBox Voltage, 2st TextBox R1, 3st TextBox R2 <br />"
+"<br />"
+"<b>Capasitor Calculate</b>: Sample 473 Numbered Capacitor Calculation = 1st TextBox 47 Value, 2st TextBox 3 Value = 47000pf <br />"
+"<br />"
+"<b>Author</b>: Emre Çelebi"
+
+#require 1.250
+
+string toString(int x)
+{
+	string result;
+	sprintf(result, "%d", x);
+	return result;
+}
+
+string toString2(real x)
+{
+	string result;
+	sprintf(result, "%f", x);
+	return result;
+}
+
+int add(int a, int b){return a + b;}
+int sub(int a, int b){return a - b;}
+int mul(int a, int b){return a * b;}
+int div(int a, int b){return a / b;}
+int resCalculator(int a, int b){return a * pow(10, b);}
+int capasitor(int cap, int x){return cap * pow(10, x);}
+real voltageDivider(real v, real r1, real r2){return (v * r2) / (r1 + r2);}
+
+
+dlgDialog("Calculator")
+{
+	int num1, num2; /** Tap Operator **/
+	int num3, num4; /** Tap Resistance **/
+	int num5, num6; /** Tap Capasitor **/
+	int selectedRadioId = 0, selectedTabId = 0, selectedListView = 0, selectedComboBox = 0, selectedListViewCap = 0;
+	real realMin = 0.0, realMax = 1000.0; 
+	real realValue1 = 0, realValue2 = 0, realValue3 = 0;
+	string str1, str2, str3, str4;
+	string comboBox[] = {"ohm", "kilohm", "megaohm"};
+	string resListStr[] = {
+		"Black\t0\t0\t%20",
+		"Brown\t1\t1\t%1",
+		"Red\t2\t2\t%2",
+		"Orange\t3\t3\t%3",
+		"Yellow\t4\t4\t%4",
+		"Green\t5\t5\t%5",
+		"Blue\t6\t6\t%6",
+		"Purple\t7\t7\t%7",
+		"Gray\t8\t8\t%8",
+		"White\t9\t9\t%9",
+		"Gold\t-\t-1\t%5",
+		"Silver\t-\t-2\t%10",
+		"Renksiz\t-\t\t%20"
+	};
+	string capListStr[] = {
+		"A\t0.05pf\t101\t100pf",
+		"B\t0.1pf\t221\t220pf",
+		"C\t0.25pf\t471\t470pf",
+		"D\t0.5pf\t102\t1000pf",
+		"E\t0.5%\t222\t2200pf",
+		"F\t1%\t472\t4700pf",
+		"G\t2%\t103\t10000pf",
+		"H\t3%\t223\t22000pf",
+		"J\t5%\t473\t47000pf",
+		"K\t10%\t104\t100000pf",
+		"L\t15%\t224\t220000pf",
+		"M\t20%\t474\t470000pf",
+		"N\t30%\t105\t1000000pf",
+		"P\t-0%, +100%\t225\t2200000pf",
+		"S\t-20%, +50%\t475\t4700000pf",
+		"W\t-0%, +200%",
+		"X\t-20%, +40%",
+		"Z\t-20%, +80%"
+	};
+	string aboutStr = "<b>Twitter</b>: <a href='http://www.twitter.com/emrecellebi'>www.twitter.com</a> <br />"
+	+ "<b>GitHub</b>: <a href='https://github.com/emrecellebi'>www.github.com</a> <br />"
+	+ "<b>Version</b>: 1.250 <br />"
+	+ "<b>Developer</b>: Created By Emre Çelebi";
+	
+	dlgTabWidget(selectedTabId)
+	{
+		dlgTabPage("Operators")
+		{
+			dlgGroup("Operator Selected")
+			{
+				dlgVBoxLayout
+				{
+					dlgGridLayout
+					{
+						dlgCell(0, 0) dlgRadioButton("Addition", selectedRadioId);
+						dlgCell(1, 0) dlgRadioButton("Subtract", selectedRadioId);
+						dlgCell(0, 1) dlgRadioButton("Multiplication", selectedRadioId);
+						dlgCell(1, 1) dlgRadioButton("Divition", selectedRadioId);
+					}
+					/** VBoxLayout End **/
+				}
+				/** Group End **/
+			}
+			
+			dlgGroup("Basic Calculate")
+			{
+				dlgHBoxLayout
+				{
+					dlgIntEdit(num1);
+					dlgIntEdit(num2);
+				}
+				dlgTextView(str1);
+			}
+			
+			/** TapPage Operators End **/
+		}
+		
+		dlgTabPage("Resistance")
+		{
+			dlgGroup("Resistance Calculate")
+			{
+				dlgGridLayout
+				{
+					dlgCell(0, 0) dlgIntEdit(num3);
+					dlgCell(0, 1) dlgIntEdit(num4);
+				}
+			}
+			dlgGroup("Resistance Color Table")
+			{
+				dlgListView("Colors\tValue\tMultiplication\tTolerance", resListStr, selectedListView);
+			}
+			dlgTextView(str2);
+			/** TapPage Resistance End **/
+		}
+		
+		dlgTabPage("Capasitor")
+		{
+			dlgGroup("Capasitor Calculate")
+			{
+				dlgGridLayout
+				{
+					dlgCell(0, 0) dlgIntEdit(num5);
+					dlgCell(0, 1) dlgIntEdit(num6);
+				}
+			}
+			dlgGroup("Capasitor Table")
+			{
+				dlgListView("Character\tTolerance\tNumber\tCapacity", capListStr, selectedListViewCap);
+			}
+			dlgTextView(str4);
+		}
+		
+		dlgTabPage("Voltage")
+		{
+			dlgGroup("Voltage Divider Calculate")
+			{
+				dlgHBoxLayout
+				{
+					dlgRealEdit(realValue1, realMin, realMax);
+					dlgRealEdit(realValue2, realMin, realMax);
+					dlgRealEdit(realValue3, realMin, realMax);
+				}
+				dlgComboBox(comboBox, selectedComboBox);
+				/** Group End **/
+			}
+			dlgTextView(str3);
+			/** TapPage Voltage End **/
+		}
+		
+		dlgTabPage("Aboute")
+		{
+			dlgTextView(aboutStr);
+		}
+		
+		/** TopWidget End **/
+	};
+	
+	dlgHBoxLayout
+	{
+		dlgPushButton("Calculate")
+		{
+			if(selectedTabId == 0)
+			{
+				if(selectedRadioId == 0)
+					str1 = toString(add(num1, num2));
+				else if(selectedRadioId == 1)
+					str1 = toString(sub(num1, num2));
+				else if(selectedRadioId == 2)
+					str1 = toString(mul(num1, num2));
+				else if(selectedRadioId == 3)
+					str1 = toString(div(num1, num2));
+			}
+			else if(selectedTabId == 1)
+				str2 = toString(resCalculator(num3, num4));
+			else if(selectedTabId == 2)
+				str4 = toString(capasitor(num5, num6));
+			else if(selectedTabId == 3)
+			{
+				if(selectedComboBox == 0)
+					str3 = toString2(voltageDivider(realValue1, realValue2, realValue3)) + "V";
+				else if(selectedComboBox == 1)
+					str3 = toString2(voltageDivider(realValue1, realValue2 * 1000, realValue3 * 1000)) + "V";
+				else if(selectedComboBox == 2)
+					str3 = toString2(voltageDivider(realValue1, realValue2 * 1000000, realValue3 * 1000000)) + "V";
+			}
+		};
+		
+		dlgPushButton("Reset")
+		{
+			if(selectedTabId == 0)
+			{
+				num1 = 0;
+				num2 = 0;
+				str1 = "";
+			}
+			else if(selectedTabId == 1)
+			{
+				num3 = 0;
+				num4 = 0;
+				str2 = "";
+			}
+			else if(selectedTabId == 2)
+			{
+				num5 = 0;
+				num6 = 0;
+				str4 = "";
+			}
+			else if(selectedTabId == 3)
+			{
+				realValue1 = 0;
+				realValue2 = 0;
+				realValue3 = 0;
+				selectedComboBox = 0;
+				str3 = "";
+			}
+		};
+		/** HLayout End **/
+	}
+	
+	dlgPushButton("Close")
+	{
+		dlgAccept();
+	}
+	
+	/** Dialog End **/
+};
