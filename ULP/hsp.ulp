@@ -8,7 +8,7 @@
 "<br />"
 "<b>Author</b>: Emre Çelebi"
 
-#require 1.250
+#require 1.380
 
 string toString(int x)
 {
@@ -80,7 +80,7 @@ dlgDialog("Calculator")
 	};
 	string aboutStr = "<b>Twitter</b>: <a href='http://www.twitter.com/emrecellebi'>www.twitter.com</a> <br />"
 	+ "<b>GitHub</b>: <a href='https://github.com/emrecellebi'>www.github.com</a> <br />"
-	+ "<b>Version</b>: 1.250 <br />"
+	+ "<b>Version</b>: 1.380 <br />"
 	+ "<b>Developer</b>: Created By Emre Çelebi";
 	
 	dlgTabWidget(selectedTabId)
@@ -157,8 +157,11 @@ dlgDialog("Calculator")
 			{
 				dlgHBoxLayout
 				{
+					dlgLabel("V:");
 					dlgRealEdit(realValue1, realMin, realMax);
+					dlgLabel("R1:");
 					dlgRealEdit(realValue2, realMin, realMax);
+					dlgLabel("R2:");
 					dlgRealEdit(realValue3, realMin, realMax);
 				}
 				dlgComboBox(comboBox, selectedComboBox);
